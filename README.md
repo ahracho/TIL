@@ -8,3 +8,6 @@ This repository is for TIL.
 
 2. Python  
 [\(2017.02.14\) Regular Expression in python](https://github.com/ahracho/TIL/blob/master/RegEx_20170214.md)
+
+3. Git  
+[\(2017.02.15\) Git Basic and how it works](https://github.com/ahracho/TIL/blob/master/git_basic_20170215.md)
