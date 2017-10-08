@@ -15,3 +15,6 @@ This repository is for TIL.
 
 4. SQL
 [\(2017.03.28\) SQL Basic](https://github.com/ahracho/TIL/blob/master/sql_20170328.md)   
+
+5. Reinforcement Learning
+[\(2017.10.08\) Reinforcement Learning Lab Practice](https://github.com/ahracho/deeplearning-for-everyone)
