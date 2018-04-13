@@ -8,8 +8,8 @@
 ## WHAT’S IN THIS CHAPTER?
 - C++에서 가장 중요한 문법과 STL을 훑어본다.
 - Smart Pointer에 대해 알아본다.
----  
 
+---  
 
 # The Basics of C++
 
@@ -26,7 +26,7 @@ int main() {
 
 굉장히 간단한 Hello, world 출력문이지만
 - 주석 : // 한 줄, /* */ 여러 줄
-- 전처리 : C++ 프로그램은 전처리 --> 컴파일 --> 링킹 순으로 동작한다.
+- 전처리 : C++ 프로그램은 전처리 --> 컴파일 --> 링킹 순으로 동작한다. #pragma -> 라이브러리를 가져다 줄 때 명시적으로 알려주는 역할로 많이 사용됨
 - main 함수
 - 입출력이 포함되어 있다.
 
@@ -52,6 +52,8 @@ namespace mycode {
 ~~~  
 
 해당 함수를 호출할 때는 namespace::함수이름() 이렇게 사용한다. 하지만 매번 namespace를 명시해주는 게 귀찮다면 using을 사용하면 된다. 다만 너무 과하게 사용하여 namespace를 사용하지 않았을 때와 같은 문제가 발생하지 않도록 주의한다(동일한 이름의 함수를 구분할 수 없게 되는 문제).  
+
+using을 사용할 때, 명시적으로 namespace::변수/함수 이렇게 사용해도 되고, 생략하고 사용해도 된다. 
 
 ~~~c++
 #include <iostream>
@@ -84,7 +86,23 @@ int i2 = int(myFloat);                      // method 2
 int i3 = static_cast<int>(myFloat); // method 3
 ~~~  
 
-첫번째 방법은 C에서처럼 사용한 건데 추천하지 않는 방법, 두번째 방법은 첫번째보다는 낫지만 거의 사용하지 않는다. 세번째 방법이 가장 안전하고 추천하는 방법이다 (10장에서 캐스팅에 대해서 더 자세히 다룰 예정).
+첫번째 방법은 C에서처럼 사용한 건데 추천하지 않는 방법, 두번째 방법은 첫번째보다는 낫지만 거의 사용하지 않는다. 세번째 방법이 가장 안전하고 추천하는 방법이다 (10장에서 캐스팅에 대해서 더 자세히 다룰 예정).  
+_> static\_cast를 쓰는 이유 : 코드 리뷰에서도 많이 지적받던 사항인데, C 스타일로 캐스팅을 하게 되면 실제로 호환되지 않는 형끼리의 변환도 가능해서 코드 안정성이 떨어진다. static-cast는 호환 가능한 형끼리의 변환만 허용하기 때문에 런타임 에러가 나거나 하는 상황을 막을 수 있다._  
+
+### Enum
+그냥 enum vs. enum class 사용. 이것도 코드 리뷰에서 enum class를 사용하는 것이 좋다고 얘기를 들었었는데, 아마 명확한 코드 작성을 위해서였던 것 같다.
+
+~~~c++
+enum class MyEnum {
+    EnumValue1,
+    EnumValue2 = 10,
+    EnumValue3
+};
+
+// MyEnum::EnumValue1 이렇게 사용해야 함
+~~~
+
+Enum class의 경우 값은 실제로는 정수형이지만, int 타입으로 취급되지 않기 때문에 연산을 위해서는 int로 캐스팅을 해서 사용해야 한다. 
 
 ## Arrays
 ### std::array
@@ -112,7 +130,7 @@ C 스타일 배열을 포함해서, begin()과 end() 함수를 사용할 수 있
 
 ~~~ c++
 std::array<int, 4> arr = {1, 2, 3, 4};
-for (int i : arr) {
+for (int i : arr) { // i는 value다! index가 아니고
     std::cout << i << std::endl;
 }
 ~~~
@@ -147,7 +165,7 @@ auto 키워드는 네가지 의미로 사용된다.
 ~~~c++
 auto x = 123;
 auto result = getFoo();
-~~~
+~~~  
 - Alternative Function Syntax를 사용한 함수 프로토타입의 시작을 가리킴
 ~~~c++
 auto func(int i) -> int
@@ -180,9 +198,9 @@ int* myIntegerPointer = nullptr; // 포인터 변수만 만들었지 메모리 �
 myIntegerPointer = new int; // int만큼 메모리 할당
 *myIntegerPointer = 8;
 
-// 다 쓰고 메모리 해제해야
+// 다 쓰고 메모리 반드시 해제해야
 delete myIntegerPointer;
-myIntegerPointer = nullptr;
+myIntegerPointer = nullptr; // 권장 : 누가 모르고 변수를 가져다 쓸 수 있기 때문에
 ~~~   
 
 ### Dynamically Allocated Arrays
@@ -217,10 +235,30 @@ std::unique_ptr<Employee> anEmployee(new Employee); // C++ 14 미만
 가리키는 데이터의 오너십을 여럿이서 가질 수 있다. 다른 포인터 변수가 해당 데이터를 가리킬 때마다 reference counter가 하나씩 증가한다. RC가 0이 되면 메모리는 해제된다. 다만, array는 shared_ptr에 저장할 수 없다. 사용할 때는 std::make_shared<>()를 사용한다.  
 
 **3. std::weak_ptr**
-weak_ptr은 RC를 증가시키지 않고 shared_ptr을 바라볼 수 있게 한다.
+weak_ptr은 RC를 증가시키지 않고 shared_ptr을 바라볼 수 있게 한다.  
+_왜 쓰느냐? 순환참조를 막기 위해서! (내가 바라볼 메모리가 살아있는 동안만 가져다 쓰자, 내가 shared\_ptr을 걸어버리면 나 때문에 안 죽을 테니까)_
 
 **NOTE : 포인터를 사용해야 한다면 std::unique_ptr을 기본으로, 여럿이 사용해야 할 때는 std::shared_ptr을 사용하도록 한다. auto_ptr은 C++ 표준에서 deprecated 되었으니 주의한다.**  
 
+
+### Reference
+#### Const Reference
+값을 그대로 함수에 보내면 값의 복사가 일어나게 되는데, 참조를 보내면 포인터를 보내고도 변수처럼 편하게 사용할 수 있다. 값의 복사를 막으면서 동시에 값을 못 바꾸게 하고 싶으면 const &를 사용하면 된다.
+
+보통 함수에 문자열을 보낼 때 그냥 생 문자열을 보내는 실수를 많이 했고, 코드 리뷰를 받으면서 const &로 보내는 습관을 들이라는 얘기를 많이 들었다. 
+
+~~~c++
+void printString(const std::string& myString)
+{
+    std::cout << myString << std::endl;
+}
+int main()
+{
+    std::string someString = "Hello World";
+    printString(someString);
+    return 0;
+}
+~~~
 
 ## Type Inference Part 2
 auto를 사용하면 간편하지만 auto는 references와 const에 대한 정보를 담지 않는다.
