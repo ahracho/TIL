@@ -78,6 +78,7 @@
 ### Fixed-Format Comments 
 정해진 포맷으로 적힌 코멘트를 파일빌더로 빌드하는 방법도 있는데, Java에서는 JavaDoc이라는 툴을 사용하고, C/C++에서는 Doxygen을 사용해서 HTML 파일로 만든다.
 
+
 **읽기 편하고 이해하기 쉬운 코드가 가장 좋은 코드이다. 만약 코드에 설명을 많이 적고 있다면 코드에 개선할 점은 없는지 확인해보는 게 좋다.**  
 
 # Decomposition
@@ -150,3 +151,7 @@ Exception을 쓰면 훨씬 더 풍부한 Error Handling 메커니즘을 사용�
 > **NOTE When selecting a style for denoting blocks of code, the important consideration is how well you can see which block falls under which condition simply by looking at the code.**
 2. Coming to Blows over Spaces and Parentheses : (), {} 띄어쓰기
 3. Spaces and Tabs 
+
+- 구글 C++ 컨벤션 찾아보기
+- AStyle Formatter
+- Doxygen 만드는 법 실습해보기

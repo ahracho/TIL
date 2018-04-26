@@ -16,7 +16,7 @@
 ## C-Style Strings
 C에서 string은 단순히 character 배열이다. 마지막 문자는 반드시 \0(NUL)으로 해야 문자열의 끝을 나타낼 수 있다. C++ 프로그램에서도 외부 라이브러리에서 C 스타일 문자열을 사용하는 경우가 있기 때문에 알아두는 것이 좋다. <cstring> 헤더에 C 스타일 문자열 연산이 정의되어 있다. 
 
-메모리 할당할 때 반드시 (strlen + 1) 만큼 해야 한다는 것!  
+**메모리 할당할 때 반드시 (strlen + 1) 만큼 해야 한다는 것!**  
 
 ## String Literals
 변수가 아니라 그냥 문자열 자체로 사용된 것을 String Literal이라고 한다 (written as a value, not a variable). String Literal은 RO 메모리 영역에 할당된다. C++ 표준에서는 string literal을 'array of n const char *'라고 정의하고 있지만 backward compatibility 때문에 const 없이 char *로 취급하기도 한다. 보통은 문제가 없지만 String Literal 값을 바꾸려 하는 동작은 정의가 되어 있지 않기 때문에 컴파일러에 따라서 다르게 동작할 수가 있으니(crash/side effect이 나거나 warning을 띄우거나, 아니면 정상 동작할 수도 있다) 주의해야 한다. String Literal을 변수에 할당할 때는 const를 쓰는 게 가장 좋다.  
