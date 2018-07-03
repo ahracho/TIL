@@ -18,3 +18,5 @@ This repository is for TIL.
 
 5. Reinforcement Learning
 [\(2017.10.08\) Reinforcement Learning Lab Practice](https://github.com/ahracho/deeplearning-for-everyone)
+
+6. Fluent Python - 모두의 연구소 풀잎스쿨 4기
